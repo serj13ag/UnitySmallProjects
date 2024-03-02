@@ -6,6 +6,7 @@ public class CardHand : MonoBehaviour
     [SerializeField] private Transform _cardsContainer;
 
     [SerializeField] private float _cardsOffsetX;
+    [SerializeField] private float _cardsRotationOffset;
 
     [SerializeField] private int _numberOfCards;
 
@@ -18,10 +19,9 @@ public class CardHand : MonoBehaviour
         for (var i = 0; i < _numberOfCards; i++)
         {
             var card = Instantiate(_cardPrefab, _cardsContainer);
-
-            var cardPosition = GetCardPosition(i, _numberOfCards, _cardsOffsetX);
-
+            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsRotationOffset);
             card.transform.localPosition = cardPosition;
+            card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
 
             _cards[i] = card;
         }
@@ -32,18 +32,22 @@ public class CardHand : MonoBehaviour
         for (var i = 0; i < _cards.Length; i++)
         {
             var card = _cards[i];
-            var cardPosition = GetCardPosition(i, _numberOfCards, _cardsOffsetX);
+            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsRotationOffset);
             card.transform.localPosition = cardPosition;
+            card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
         }
     }
 
-    private static Vector3 GetCardPosition(int handCardIndex, int cardsInHand, float cardsOffsetX)
+    private static Vector3 GetCardPositionAndRotation(int handCardIndex, int cardsInHand, float cardsOffsetX,
+        float cardsRotationOffset)
     {
         var centerIndex = cardsInHand / 2f - 0.5f;
 
         var offsetFromCenter = handCardIndex - centerIndex;
-        var positionX = offsetFromCenter * cardsOffsetX;
 
-        return new Vector3(positionX, 0f, 0f);
+        var positionX = offsetFromCenter * cardsOffsetX;
+        var rotationValue = offsetFromCenter * cardsRotationOffset;
+
+        return new Vector3(positionX, 0f, rotationValue);
     }
 }
