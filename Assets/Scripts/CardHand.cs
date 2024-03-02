@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class CardHand : MonoBehaviour
 {
+    private const int MaxNumberOfCardsInHand = 20;
+
     [Header("Dependencies")]
-    [SerializeField] private GameObject _cardPrefab;
+    [SerializeField] private Card _cardPrefab;
 
     [SerializeField] private Transform _cardsContainer;
 
@@ -18,23 +20,17 @@ public class CardHand : MonoBehaviour
     [SerializeField] private float _cardsLoweringOffsetBasedOnAngle;
 
     [Header("Debug")]
+    [Range(0, MaxNumberOfCardsInHand)]
     [SerializeField] private int _numberOfCards;
 
-    private GameObject[] _cards;
+    private Card[] _cards;
 
     private void Start()
     {
-        _cards = new GameObject[_numberOfCards];
-
-        for (var i = 0; i < _numberOfCards; i++)
+        _cards = new Card[MaxNumberOfCardsInHand];
+        for (var i = 0; i < _cards.Length; i++)
         {
-            var card = Instantiate(_cardPrefab, _cardsContainer);
-            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX,
-                _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle, _numberOfCardsToStartRotate);
-            card.transform.localPosition = cardPosition;
-            card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
-
-            _cards[i] = card;
+            _cards[i] = Instantiate(_cardPrefab, _cardsContainer);
         }
     }
 
@@ -42,11 +38,16 @@ public class CardHand : MonoBehaviour
     {
         for (var i = 0; i < _cards.Length; i++)
         {
+            _cards[i].SetActive(i < _numberOfCards);
+        }
+
+        for (var i = 0; i < _numberOfCards; i++)
+        {
             var card = _cards[i];
-            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX,
+            
+            var cardPositionAndRotation = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX,
                 _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle, _numberOfCardsToStartRotate);
-            card.transform.localPosition = cardPosition;
-            card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
+            card.SetPositionAndRotation(cardPositionAndRotation);
         }
     }
 

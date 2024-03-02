@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6744870914183294122}
+  - component: {fileID: 4399538691519186565}
   m_Layer: 5
-  m_Name: CardPrefab
+  m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,6 +38,19 @@ RectTransform:
   m_AnchoredPosition: {x: 344.76, y: 246.64}
   m_SizeDelta: {x: 150, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4399538691519186565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3707823329503573756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ec0a5f94ec45818bc9c5005bb04f8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scaleOnHover: 2
 --- !u!1 &6489134333996684384
 GameObject:
   m_ObjectHideFlags: 0

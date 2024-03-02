@@ -299,14 +299,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c57faadac0aef124e9bafd10139ac1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardPrefab: {fileID: 3707823329503573756, guid: 12d8a9a6ca1a1d84ba94474942b36519, type: 3}
+  _cardPrefab: {fileID: 4399538691519186565, guid: 12d8a9a6ca1a1d84ba94474942b36519, type: 3}
   _cardsContainer: {fileID: 308016133}
   _cardsOffsetX: 100
   _numberOfCardsToStartRotate: 3
   _cardsOffsetRotationAngle: 3
   _edgeCardMaxRotationAngle: 40
   _cardsLoweringOffsetBasedOnAngle: 5
-  _numberOfCards: 12
+  _numberOfCards: 10
 --- !u!1 &1269370712
 GameObject:
   m_ObjectHideFlags: 0
