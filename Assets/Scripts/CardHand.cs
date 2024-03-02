@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CardHand : MonoBehaviour
 {
@@ -6,7 +7,11 @@ public class CardHand : MonoBehaviour
     [SerializeField] private Transform _cardsContainer;
 
     [SerializeField] private float _cardsOffsetX;
-    [SerializeField] private float _cardsRotationOffset;
+
+    [FormerlySerializedAs("_cardsRotationOffset")] [SerializeField]
+    private float _cardsOffsetRotationAngle;
+
+    [SerializeField] private float _edgeCardMaxRotationAngle;
 
     [SerializeField] private int _numberOfCards;
 
@@ -19,7 +24,8 @@ public class CardHand : MonoBehaviour
         for (var i = 0; i < _numberOfCards; i++)
         {
             var card = Instantiate(_cardPrefab, _cardsContainer);
-            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsRotationOffset);
+            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsOffsetRotationAngle,
+                _edgeCardMaxRotationAngle);
             card.transform.localPosition = cardPosition;
             card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
 
@@ -32,22 +38,30 @@ public class CardHand : MonoBehaviour
         for (var i = 0; i < _cards.Length; i++)
         {
             var card = _cards[i];
-            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsRotationOffset);
+            var cardPosition = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX, _cardsOffsetRotationAngle,
+                _edgeCardMaxRotationAngle);
             card.transform.localPosition = cardPosition;
             card.transform.localRotation = Quaternion.Euler(0f, 0f, cardPosition.z);
         }
     }
 
     private static Vector3 GetCardPositionAndRotation(int handCardIndex, int cardsInHand, float cardsOffsetX,
-        float cardsRotationOffset)
+        float cardsOffsetRotationAngle, float edgeCardMaxRotationAngle)
     {
         var centerIndex = cardsInHand / 2f - 0.5f;
 
         var offsetFromCenter = handCardIndex - centerIndex;
 
         var positionX = offsetFromCenter * cardsOffsetX;
-        var rotationValue = offsetFromCenter * cardsRotationOffset;
 
-        return new Vector3(positionX, 0f, rotationValue);
+        var edgeCardRotationAngle = centerIndex * cardsOffsetRotationAngle;
+        if (edgeCardRotationAngle > edgeCardMaxRotationAngle)
+        {
+            cardsOffsetRotationAngle = edgeCardMaxRotationAngle / (cardsInHand / 2f);
+        }
+
+        var rotationAngle = offsetFromCenter * -cardsOffsetRotationAngle;
+
+        return new Vector3(positionX, 0f, rotationAngle);
     }
 }

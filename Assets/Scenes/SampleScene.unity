@@ -302,7 +302,8 @@ MonoBehaviour:
   _cardPrefab: {fileID: 3707823329503573756, guid: 12d8a9a6ca1a1d84ba94474942b36519, type: 3}
   _cardsContainer: {fileID: 308016133}
   _cardsOffsetX: 100
-  _cardsRotationOffset: -10
+  _cardsOffsetRotationAngle: 10
+  _edgeCardMaxRotationAngle: 40
   _numberOfCards: 6
 --- !u!1 &1269370712
 GameObject:
