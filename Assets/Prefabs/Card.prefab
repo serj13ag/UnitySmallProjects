@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scaleOnHover: 2
+  _yOffsetOnHover: 100
 --- !u!1 &6489134333996684384
 GameObject:
   m_ObjectHideFlags: 0

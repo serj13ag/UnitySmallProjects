@@ -47,7 +47,7 @@ public class CardHand : MonoBehaviour
             
             var cardPositionAndRotation = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX,
                 _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle, _numberOfCardsToStartRotate);
-            card.SetPositionAndRotation(cardPositionAndRotation);
+            card.SetTargetPositionAndRotation(cardPositionAndRotation);
         }
     }
 
