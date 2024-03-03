@@ -23,6 +23,7 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
         {
             var mouseDragDistance = Input.mousePosition - _mousePositionOnClick;
             transform.localPosition = _localPositionOnClick + mouseDragDistance;
+            transform.localRotation = Quaternion.identity;
         }
         else
         {
@@ -48,6 +49,11 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_cardState == CardState.Dragged)
+        {
+            return;
+        }
+
         _cardHand.ShowPreviewCard(transform.position);
         Hide();
 
@@ -56,6 +62,11 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_cardState == CardState.Dragged)
+        {
+            return;
+        }
+
         _cardHand.HidePreviewCard();
         Show();
 
@@ -67,11 +78,14 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
         _localPositionOnClick = transform.localPosition;
         _mousePositionOnClick = Input.mousePosition;
 
+        _cardHand.HidePreviewCard();
+        Show();
+
         _cardState = CardState.Dragged;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _cardState = CardState.Hovered;
+        _cardState = CardState.InHand;
     }
 }
