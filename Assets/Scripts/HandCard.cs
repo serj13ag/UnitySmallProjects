@@ -7,23 +7,25 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
 
     private CardState _cardState;
 
+    private int _initialSiblingIndex;
+
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
-    private Vector3 _localPositionOnClick;
-    private Vector3 _mousePositionOnClick;
 
     public void Init(CardHand cardHand)
     {
         _cardHand = cardHand;
+
+        _initialSiblingIndex = transform.GetSiblingIndex();
     }
 
     private void Update()
     {
         if (_cardState == CardState.Dragged)
         {
-            var mouseDragDistance = Input.mousePosition - _mousePositionOnClick;
-            transform.localPosition = _localPositionOnClick + mouseDragDistance;
-            transform.localRotation = Quaternion.identity;
+            var trs = transform;
+            trs.position = Input.mousePosition;
+            trs.localRotation = Quaternion.identity;
         }
         else
         {
@@ -75,17 +77,18 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _localPositionOnClick = transform.localPosition;
-        _mousePositionOnClick = Input.mousePosition;
-
         _cardHand.HidePreviewCard();
+
         Show();
+        transform.SetAsLastSibling();
 
         _cardState = CardState.Dragged;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        transform.SetSiblingIndex(_initialSiblingIndex);
+
         _cardState = CardState.InHand;
     }
 }
