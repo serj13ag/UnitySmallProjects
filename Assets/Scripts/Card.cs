@@ -2,7 +2,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private float _scaleOnHover;
     [SerializeField] private float _yOffsetOnHover;
@@ -10,11 +10,13 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Vector3 _initialScale;
     private int _initialSiblingIndex;
 
-    private bool _isHovered;
+    private CardState _cardState;
 
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
     private Vector3 _targetScale;
+    private Vector3 _localPositionOnClick;
+    private Vector3 _mousePositionOnClick;
 
     private void Awake()
     {
@@ -26,10 +28,18 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Update()
     {
-        var trs = transform;
-        trs.localPosition = _targetPosition;
-        trs.localRotation = _targetRotation;
-        trs.localScale = _targetScale;
+        if (_cardState == CardState.Dragged)
+        {
+            var mouseDragDistance = Input.mousePosition - _mousePositionOnClick;
+            transform.localPosition = _localPositionOnClick + mouseDragDistance;
+        }
+        else
+        {
+            var trs = transform;
+            trs.localPosition = _targetPosition;
+            trs.localRotation = _targetRotation;
+            trs.localScale = _targetScale;
+        }
     }
 
     public void SetActive(bool value)
@@ -39,13 +49,11 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void SetTargetPositionAndRotation(Vector3 positionAndRotation)
     {
-        if (_isHovered)
+        if (_cardState == CardState.InHand)
         {
-            return;
+            _targetPosition = new Vector3(positionAndRotation.x, positionAndRotation.y, 0f);
+            _targetRotation = Quaternion.Euler(0f, 0f, positionAndRotation.z);
         }
-
-        _targetPosition = new Vector3(positionAndRotation.x, positionAndRotation.y, 0f);
-        _targetRotation = Quaternion.Euler(0f, 0f, positionAndRotation.z);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -56,7 +64,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         transform.SetAsLastSibling();
 
-        _isHovered = true;
+        _cardState = CardState.Hovered;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -65,6 +73,19 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         transform.SetSiblingIndex(_initialSiblingIndex);
 
-        _isHovered = false;
+        _cardState = CardState.InHand;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _localPositionOnClick = transform.localPosition;
+        _mousePositionOnClick = Input.mousePosition;
+
+        _cardState = CardState.Dragged;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _cardState = CardState.Hovered;
     }
 }
