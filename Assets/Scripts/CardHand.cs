@@ -6,7 +6,8 @@ public class CardHand : MonoBehaviour
     private const int MaxNumberOfCardsInHand = 20;
 
     [Header("Dependencies")]
-    [SerializeField] private Card _cardPrefab;
+    [SerializeField] private HandCard _handCardPrefab;
+    [SerializeField] private Card _previewCard;
 
     [SerializeField] private Transform _cardsContainer;
 
@@ -23,15 +24,19 @@ public class CardHand : MonoBehaviour
     [Range(0, MaxNumberOfCardsInHand)]
     [SerializeField] private int _numberOfCards;
 
-    private Card[] _cards;
+    private HandCard[] _cards;
 
     private void Start()
     {
-        _cards = new Card[MaxNumberOfCardsInHand];
+        _cards = new HandCard[MaxNumberOfCardsInHand];
         for (var i = 0; i < _cards.Length; i++)
         {
-            _cards[i] = Instantiate(_cardPrefab, _cardsContainer);
+            var card = Instantiate(_handCardPrefab, _cardsContainer);
+            card.Init(this);
+            _cards[i] = card;
         }
+
+        _previewCard.Hide();
     }
 
     private void Update()
@@ -49,6 +54,17 @@ public class CardHand : MonoBehaviour
                 _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle, _numberOfCardsToStartRotate);
             card.SetTargetPositionAndRotation(cardPositionAndRotation);
         }
+    }
+    
+    public void ShowPreviewCard(Vector3 position)
+    {
+        _previewCard.transform.position = position + new Vector3(0f, 100f, 0f);
+        _previewCard.Show();
+    }
+
+    public void HidePreviewCard()
+    {
+        _previewCard.Hide();
     }
 
     private static Vector3 GetCardPositionAndRotation(int handCardIndex, int numberOfCardsInHand, float cardsOffsetX,
