@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CardHand : MonoBehaviour
@@ -8,7 +9,6 @@ public class CardHand : MonoBehaviour
     [Header("Dependencies")]
     [SerializeField] private HandCard _handCardPrefab;
     [SerializeField] private Card _previewCard;
-
     [SerializeField] private Transform _cardsContainer;
 
     [Header("Settings")]
@@ -20,42 +20,53 @@ public class CardHand : MonoBehaviour
 
     [SerializeField] private float _cardsLoweringOffsetBasedOnAngle;
 
-    [Header("Debug")]
-    [Range(0, MaxNumberOfCardsInHand)]
-    [SerializeField] private int _numberOfCards;
+    private HandCard[] _cardPrefabs;
 
-    private HandCard[] _cards;
+    private List<HandCard> _cardsInHand;
 
-    private void Start()
+    public void Init()
     {
-        _cards = new HandCard[MaxNumberOfCardsInHand];
-        for (var i = 0; i < _cards.Length; i++)
+        _cardsInHand = new List<HandCard>();
+
+        _cardPrefabs = new HandCard[MaxNumberOfCardsInHand];
+        for (var i = 0; i < _cardPrefabs.Length; i++)
         {
             var card = Instantiate(_handCardPrefab, _cardsContainer);
             card.Init(this);
-            _cards[i] = card;
+            card.SetActive(false);
+
+            _cardPrefabs[i] = card;
         }
 
         _previewCard.Hide();
     }
 
-    private void Update()
+    public void AddCards(CardData[] startCards)
     {
-        for (var i = 0; i < _cards.Length; i++)
+        for (var i = 0; i < startCards.Length; i++)
         {
-            _cards[i].SetActive(i < _numberOfCards);
-        }
+            var cardData = startCards[i];
 
-        for (var i = 0; i < _numberOfCards; i++)
-        {
-            var card = _cards[i];
+            var cardPrefab = _cardPrefabs[i];
+            cardPrefab.SetData(cardData);
+            cardPrefab.SetActive(true);
             
-            var cardPositionAndRotation = GetCardPositionAndRotation(i, _numberOfCards, _cardsOffsetX,
-                _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle, _numberOfCardsToStartRotate);
-            card.SetTargetPositionAndRotation(cardPositionAndRotation);
+            _cardsInHand.Add(cardPrefab);
         }
     }
-    
+
+    private void Update()
+    {
+        for (int i = 0; i < _cardsInHand.Count; i++)
+        {
+            var cardPositionAndRotation = GetCardPositionAndRotation(i, _cardsInHand.Count, _cardsOffsetX,
+                _cardsLoweringOffsetBasedOnAngle, _cardsOffsetRotationAngle, _edgeCardMaxRotationAngle,
+                _numberOfCardsToStartRotate);
+
+            _cardsInHand[i].SetTargetPositionAndRotation(cardPositionAndRotation);
+        }
+    }
+
     public void ShowPreviewCard(Vector3 position)
     {
         _previewCard.transform.position = position + new Vector3(0f, 100f, 0f);
@@ -68,7 +79,8 @@ public class CardHand : MonoBehaviour
     }
 
     private static Vector3 GetCardPositionAndRotation(int handCardIndex, int numberOfCardsInHand, float cardsOffsetX,
-        float cardsOffsetY, float cardsOffsetRotationAngle, float edgeCardMaxRotationAngle, int numberOfCardsToStartRotate)
+        float cardsOffsetY, float cardsOffsetRotationAngle, float edgeCardMaxRotationAngle,
+        int numberOfCardsToStartRotate)
     {
         var centerIndex = numberOfCardsInHand / 2f - 0.5f;
         var offsetFromCenter = handCardIndex - centerIndex;

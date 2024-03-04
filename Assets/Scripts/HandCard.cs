@@ -35,6 +35,11 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
         }
     }
 
+    public void SetData(CardData cardData)
+    {
+        // TODO add text
+    }
+
     public void SetActive(bool value)
     {
         gameObject.SetActive(value);
