@@ -7,8 +7,8 @@ public class CardHand : MonoBehaviour
     private const int MaxNumberOfCardsInHand = 20;
 
     [Header("Dependencies")]
-    [SerializeField] private HandCard _handCardPrefab;
-    [SerializeField] private Card _previewCard;
+    [SerializeField] private HandCardView _handCardViewPrefab;
+    [SerializeField] private CardView _previewCardView;
     [SerializeField] private Transform _cardsContainer;
 
     [Header("Settings")]
@@ -20,28 +20,27 @@ public class CardHand : MonoBehaviour
 
     [SerializeField] private float _cardsLoweringOffsetBasedOnAngle;
 
-    private HandCard[] _cardPrefabs;
-
-    private List<HandCard> _cardsInHand;
+    private HandCardView[] _cardPrefabs;
+    private List<HandCardView> _cardsInHand;
 
     public void Init()
     {
-        _cardsInHand = new List<HandCard>();
+        _cardsInHand = new List<HandCardView>();
 
-        _cardPrefabs = new HandCard[MaxNumberOfCardsInHand];
+        _cardPrefabs = new HandCardView[MaxNumberOfCardsInHand];
         for (var i = 0; i < _cardPrefabs.Length; i++)
         {
-            var card = Instantiate(_handCardPrefab, _cardsContainer);
+            var card = Instantiate(_handCardViewPrefab, _cardsContainer);
             card.Init(this);
             card.SetActive(false);
 
             _cardPrefabs[i] = card;
         }
 
-        _previewCard.Hide();
+        _previewCardView.Hide();
     }
 
-    public void AddCards(CardData[] startCards)
+    public void AddCards(Card[] startCards)
     {
         for (var i = 0; i < startCards.Length; i++)
         {
@@ -69,13 +68,13 @@ public class CardHand : MonoBehaviour
 
     public void ShowPreviewCard(Vector3 position)
     {
-        _previewCard.transform.position = position + new Vector3(0f, 100f, 0f);
-        _previewCard.Show();
+        _previewCardView.transform.position = position + new Vector3(0f, 100f, 0f);
+        _previewCardView.Show();
     }
 
     public void HidePreviewCard()
     {
-        _previewCard.Hide();
+        _previewCardView.Hide();
     }
 
     private static Vector3 GetCardPositionAndRotation(int handCardIndex, int numberOfCardsInHand, float cardsOffsetX,

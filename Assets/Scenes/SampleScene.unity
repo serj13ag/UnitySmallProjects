@@ -457,8 +457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c57faadac0aef124e9bafd10139ac1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _handCardPrefab: {fileID: 4399538691519186565, guid: 12d8a9a6ca1a1d84ba94474942b36519, type: 3}
-  _previewCard: {fileID: 238858296}
+  _handCardViewPrefab: {fileID: 4399538691519186565, guid: 12d8a9a6ca1a1d84ba94474942b36519, type: 3}
+  _previewCardView: {fileID: 238858296}
   _cardsContainer: {fileID: 308016133}
   _cardsOffsetX: 100
   _numberOfCardsToStartRotate: 3

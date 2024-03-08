@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private CardHand _cardHand;
 
@@ -35,7 +35,7 @@ public class HandCard : Card, IPointerEnterHandler, IPointerExitHandler, IPointe
         }
     }
 
-    public void SetData(CardData cardData)
+    public void SetData(Card card)
     {
         // TODO add text
     }

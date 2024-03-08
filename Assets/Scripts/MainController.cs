@@ -3,7 +3,6 @@ using UnityEngine;
 public class MainController : MonoBehaviour
 {
     [SerializeField] private CardHand _cardHand;
-
     [SerializeField] private int _cardsInStartHand;
 
     private int _nextCardId;
@@ -15,18 +14,18 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
-        var startCards = new CardData[_cardsInStartHand];
+        var startCards = new Card[_cardsInStartHand];
 
         for (var i = 0; i < _cardsInStartHand; i++)
         {
-            startCards[i] = GetCardData();
+            startCards[i] = CreateCard();
         }
 
         _cardHand.AddCards(startCards);
     }
 
-    private CardData GetCardData()
+    private Card CreateCard()
     {
-        return new CardData(_nextCardId++);
+        return new Card(_nextCardId++);
     }
 }

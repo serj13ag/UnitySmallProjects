@@ -1,16 +1,9 @@
-using UnityEngine;
-
-public class Card : MonoBehaviour
+public class Card
 {
-    [SerializeField] private CanvasGroup _canvasGroup;
+    public int Id { get; }
 
-    public void Show()
+    public Card(int id)
     {
-        _canvasGroup.alpha = 1f;
-    }
-
-    public void Hide()
-    {
-        _canvasGroup.alpha = 0f;
+        Id = id;
     }
 }
