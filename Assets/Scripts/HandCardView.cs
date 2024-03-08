@@ -15,6 +15,8 @@ public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
 
+    public int CardId => _card.Id;
+
     public void Init(CardHand cardHand)
     {
         _cardHand = cardHand;
@@ -43,11 +45,19 @@ public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         _cardView.UpdateView(card);
         transform.SetSiblingIndex(siblingIndex);
+
+        _cardState = CardState.InHand;
     }
 
     public void SetActive(bool value)
     {
         gameObject.SetActive(value);
+    }
+
+    public void DecrementSiblingIndex()
+    {
+        _initialSiblingIndex--;
+        transform.SetSiblingIndex(_initialSiblingIndex);
     }
 
     public void SetTargetPositionAndRotation(Vector3 positionAndRotation)
@@ -97,8 +107,14 @@ public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        transform.SetSiblingIndex(_initialSiblingIndex);
-
-        _cardState = CardState.InHand;
+        if (_cardHand.InDropZone(eventData.position))
+        {
+            _cardHand.RemoveCard(_card);
+        }
+        else
+        {
+            transform.SetSiblingIndex(_initialSiblingIndex);
+            _cardState = CardState.InHand;
+        }
     }
 }

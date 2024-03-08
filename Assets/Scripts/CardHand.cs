@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardHand : MonoBehaviour
 {
     private const int MaxNumberOfCardsInHand = 20;
+    private const float MinViewportDropZoneY = 0.3f;
 
     [Header("Dependencies")]
     [SerializeField] private HandCardView _handCardViewPrefab;
@@ -21,11 +22,15 @@ public class CardHand : MonoBehaviour
 
     [SerializeField] private float _cardsLoweringOffsetBasedOnAngle;
 
+    private Camera _camera;
+
     private Stack<HandCardView> _handCardViewPool;
     private List<HandCardView> _cardsInHand;
 
     public void Init()
     {
+        _camera = Camera.main;
+
         _handCardViewPool = CreateHandCardViewPool();
         _cardsInHand = new List<HandCardView>();
         _previewCardView.Hide();
@@ -55,10 +60,42 @@ public class CardHand : MonoBehaviour
     {
         if (_cardsInHand.Count >= MaxNumberOfCardsInHand)
         {
+            Debug.LogError($"Can't add more than {MaxNumberOfCardsInHand} cards to hand");
             return;
         }
 
         AddHandCardView(card);
+    }
+
+    public void RemoveCard(Card card)
+    {
+        var removedCardIndex = -1;
+
+        for (var i = 0; i < _cardsInHand.Count; i++)
+        {
+            var handCardView = _cardsInHand[i];
+            if (handCardView.CardId == card.Id)
+            {
+                removedCardIndex = i;
+
+                handCardView.SetActive(false);
+                _cardsInHand.Remove(handCardView);
+
+                _handCardViewPool.Push(handCardView);
+                break;
+            }
+        }
+
+        if (removedCardIndex < 0)
+        {
+            Debug.LogError($"There is no card with Id={card.Id} in hand!");
+            return;
+        }
+
+        for (var i = removedCardIndex; i < _cardsInHand.Count; i++)
+        {
+            _cardsInHand[i].DecrementSiblingIndex();
+        }
     }
 
     public void ShowPreviewCard(Card card, Vector3 position)
@@ -71,6 +108,12 @@ public class CardHand : MonoBehaviour
     public void HidePreviewCard()
     {
         _previewCardView.Hide();
+    }
+
+    public bool InDropZone(Vector2 position)
+    {
+        var viewportPosition = _camera.ScreenToViewportPoint(position);
+        return viewportPosition.y > MinViewportDropZoneY;
     }
 
     private Stack<HandCardView> CreateHandCardViewPool()
