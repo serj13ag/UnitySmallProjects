@@ -47,7 +47,7 @@ public class CardHand : MonoBehaviour
             var cardData = startCards[i];
 
             var cardPrefab = _cardPrefabs[i];
-            cardPrefab.SetData(cardData);
+            cardPrefab.UpdateView(cardData);
             cardPrefab.SetActive(true);
             
             _cardsInHand.Add(cardPrefab);
@@ -66,8 +66,9 @@ public class CardHand : MonoBehaviour
         }
     }
 
-    public void ShowPreviewCard(Vector3 position)
+    public void ShowPreviewCard(Card card, Vector3 position)
     {
+        _previewCardView.UpdateView(card);
         _previewCardView.transform.position = position + new Vector3(0f, 100f, 0f);
         _previewCardView.Show();
     }

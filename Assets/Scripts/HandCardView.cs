@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
+    [SerializeField] private CardView _cardView;
+    
     private CardHand _cardHand;
 
     private CardState _cardState;
@@ -11,6 +13,7 @@ public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler,
 
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
+    private Card _card;
 
     public void Init(CardHand cardHand)
     {
@@ -35,9 +38,11 @@ public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler,
         }
     }
 
-    public void SetData(Card card)
+    public void UpdateView(Card card)
     {
-        // TODO add text
+        _card = card;
+        
+        _cardView.UpdateView(card);
     }
 
     public void SetActive(bool value)
@@ -61,8 +66,8 @@ public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler,
             return;
         }
 
-        _cardHand.ShowPreviewCard(transform.position);
-        Hide();
+        _cardHand.ShowPreviewCard(_card, transform.position);
+        _cardView.Hide();
 
         _cardState = CardState.Hovered;
     }
@@ -75,7 +80,7 @@ public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler,
         }
 
         _cardHand.HidePreviewCard();
-        Show();
+        _cardView.Show();
 
         _cardState = CardState.InHand;
     }
@@ -84,7 +89,7 @@ public class HandCardView : CardView, IPointerEnterHandler, IPointerExitHandler,
     {
         _cardHand.HidePreviewCard();
 
-        Show();
+        _cardView.Show();
         transform.SetAsLastSibling();
 
         _cardState = CardState.Dragged;
