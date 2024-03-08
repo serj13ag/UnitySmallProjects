@@ -1,25 +1,23 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
+    IPointerUpHandler
 {
     [SerializeField] private CardView _cardView;
-    
+
     private CardHand _cardHand;
 
-    private CardState _cardState;
-
+    private Card _card;
     private int _initialSiblingIndex;
 
+    private CardState _cardState;
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
-    private Card _card;
 
     public void Init(CardHand cardHand)
     {
         _cardHand = cardHand;
-
-        _initialSiblingIndex = transform.GetSiblingIndex();
     }
 
     private void Update()
@@ -38,11 +36,13 @@ public class HandCardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    public void UpdateView(Card card)
+    public void UpdateView(Card card, int siblingIndex)
     {
         _card = card;
-        
+        _initialSiblingIndex = siblingIndex;
+
         _cardView.UpdateView(card);
+        transform.SetSiblingIndex(siblingIndex);
     }
 
     public void SetActive(bool value)

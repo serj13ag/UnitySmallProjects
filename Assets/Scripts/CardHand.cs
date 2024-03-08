@@ -8,6 +8,7 @@ public class CardHand : MonoBehaviour
 
     [Header("Dependencies")]
     [SerializeField] private HandCardView _handCardViewPrefab;
+
     [SerializeField] private CardView _previewCardView;
     [SerializeField] private Transform _cardsContainer;
 
@@ -20,38 +21,14 @@ public class CardHand : MonoBehaviour
 
     [SerializeField] private float _cardsLoweringOffsetBasedOnAngle;
 
-    private HandCardView[] _cardPrefabs;
+    private Stack<HandCardView> _handCardViewPool;
     private List<HandCardView> _cardsInHand;
 
     public void Init()
     {
+        _handCardViewPool = CreateHandCardViewPool();
         _cardsInHand = new List<HandCardView>();
-
-        _cardPrefabs = new HandCardView[MaxNumberOfCardsInHand];
-        for (var i = 0; i < _cardPrefabs.Length; i++)
-        {
-            var card = Instantiate(_handCardViewPrefab, _cardsContainer);
-            card.Init(this);
-            card.SetActive(false);
-
-            _cardPrefabs[i] = card;
-        }
-
         _previewCardView.Hide();
-    }
-
-    public void AddCards(Card[] startCards)
-    {
-        for (var i = 0; i < startCards.Length; i++)
-        {
-            var cardData = startCards[i];
-
-            var cardPrefab = _cardPrefabs[i];
-            cardPrefab.UpdateView(cardData);
-            cardPrefab.SetActive(true);
-            
-            _cardsInHand.Add(cardPrefab);
-        }
     }
 
     private void Update()
@@ -66,6 +43,24 @@ public class CardHand : MonoBehaviour
         }
     }
 
+    public void AddCards(IEnumerable<Card> cards)
+    {
+        foreach (var card in cards)
+        {
+            AddCard(card);
+        }
+    }
+
+    public void AddCard(Card card)
+    {
+        if (_cardsInHand.Count >= MaxNumberOfCardsInHand)
+        {
+            return;
+        }
+
+        AddHandCardView(card);
+    }
+
     public void ShowPreviewCard(Card card, Vector3 position)
     {
         _previewCardView.UpdateView(card);
@@ -76,6 +71,30 @@ public class CardHand : MonoBehaviour
     public void HidePreviewCard()
     {
         _previewCardView.Hide();
+    }
+
+    private Stack<HandCardView> CreateHandCardViewPool()
+    {
+        var handCardViewPool = new Stack<HandCardView>(MaxNumberOfCardsInHand);
+        for (var i = 0; i < MaxNumberOfCardsInHand; i++)
+        {
+            var handCardView = Instantiate(_handCardViewPrefab, _cardsContainer);
+            handCardView.Init(this);
+            handCardView.SetActive(false);
+
+            handCardViewPool.Push(handCardView);
+        }
+
+        return handCardViewPool;
+    }
+
+    private void AddHandCardView(Card card)
+    {
+        var cardPrefab = _handCardViewPool.Pop();
+        cardPrefab.UpdateView(card, _cardsInHand.Count);
+        cardPrefab.SetActive(true);
+
+        _cardsInHand.Add(cardPrefab);
     }
 
     private static Vector3 GetCardPositionAndRotation(int handCardIndex, int numberOfCardsInHand, float cardsOffsetX,
