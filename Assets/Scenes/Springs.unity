@@ -754,6 +754,9 @@ MonoBehaviour:
   _backgroundRaycastRect: {fileID: 1853149696}
   _handleSlideArea: {fileID: 767712348}
   _handle: {fileID: 50563220}
+  _scaleDeltaHandle: -0.4
+  _frequency: 20
+  _damping: 0.5
 --- !u!1 &1583275006
 GameObject:
   m_ObjectHideFlags: 0
