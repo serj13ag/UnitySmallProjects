@@ -16,20 +16,28 @@ namespace Springs
 
         private bool _isDragging;
 
-        private SpringyMotionParams _handleSpringyMotionParams;
+        private SpringyMotionParams _handleScaleSpringyMotionParams;
+        private float _handleScaleCurrentVelocity;
         private float _handleTargetDeltaScale;
-        private float _handleCurrentVelocity;
         private float _handleDeltaScale;
         private float _handleInitialScaleX;
         private float _handleInitialScaleY;
 
+        private SpringyMotionParams _handlePositionSpringyMotionParams;
+        private float _handlePositionCurrentVelocity;
+        private float _handleTargetPositionX;
+        private float _handlePositionX;
+
         private void Awake()
         {
-            _handleSpringyMotionParams = new SpringyMotionParams();
+            _handleScaleSpringyMotionParams = new SpringyMotionParams();
+            _handlePositionSpringyMotionParams = new SpringyMotionParams();
 
             var handleLocalScale = _handle.localScale;
             _handleInitialScaleX = handleLocalScale.x;
             _handleInitialScaleY = handleLocalScale.y;
+
+            _handleTargetPositionX = _handle.localPosition.x;
         }
 
         private void Update()
@@ -45,9 +53,10 @@ namespace Springs
                 var handleAreaHalfWidth = _handleSlideArea.rect.width / 2f;
                 var handlePositionX = Mathf.Lerp(-handleAreaHalfWidth, handleAreaHalfWidth, lerpedPositionX);
 
-                _handle.localPosition = new Vector3(handlePositionX, 0f, 0f);
+                _handleTargetPositionX = handlePositionX;
             }
 
+            HandleSpringyPosition();
             HandleSpringyScale();
         }
 
@@ -63,10 +72,18 @@ namespace Springs
             _handleTargetDeltaScale = 0f;
         }
 
+        private void HandleSpringyPosition()
+        {
+            SpringyUtils.CalcDampedSpringMotionParams(ref _handlePositionSpringyMotionParams, Time.deltaTime, _handleSpringFrequency, _handleSpringDamping);
+            SpringyUtils.UpdateDampedSpringMotion(ref _handlePositionX, ref _handlePositionCurrentVelocity, _handleTargetPositionX, _handleScaleSpringyMotionParams);
+
+            _handle.localPosition = new Vector3(_handlePositionX, 0f, 0f);
+        }
+
         private void HandleSpringyScale()
         {
-            SpringyUtils.CalcDampedSpringMotionParams(ref _handleSpringyMotionParams, Time.deltaTime, _handleSpringFrequency, _handleSpringDamping);
-            SpringyUtils.UpdateDampedSpringMotion(ref _handleDeltaScale, ref _handleCurrentVelocity, _handleTargetDeltaScale, _handleSpringyMotionParams);
+            SpringyUtils.CalcDampedSpringMotionParams(ref _handleScaleSpringyMotionParams, Time.deltaTime, _handleSpringFrequency, _handleSpringDamping);
+            SpringyUtils.UpdateDampedSpringMotion(ref _handleDeltaScale, ref _handleScaleCurrentVelocity, _handleTargetDeltaScale, _handleScaleSpringyMotionParams);
 
             _handle.localScale = new Vector3(_handleInitialScaleX + _handleDeltaScale, _handleInitialScaleY + _handleDeltaScale, 1f);
         }
