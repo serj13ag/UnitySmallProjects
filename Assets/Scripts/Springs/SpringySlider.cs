@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +14,8 @@ namespace Springs
         [SerializeField] private float _handleScaleDelta;
         [SerializeField] private float _handleSpringFrequency;
         [SerializeField] private float _handleSpringDamping;
+
+        [SerializeField] private int _slots;
 
         private bool _isDragging;
 
@@ -44,16 +47,7 @@ namespace Springs
         {
             if (_isDragging)
             {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(_backgroundRaycastRect, Input.mousePosition, null, out var localPoint);
-
-                var rectPositionX = localPoint.x;
-                var halfWidth = _backgroundRaycastRect.rect.width / 2f;
-                var lerpedPositionX = Mathf.InverseLerp(-halfWidth, halfWidth, rectPositionX);
-
-                var handleAreaHalfWidth = _handleSlideArea.rect.width / 2f;
-                var handlePositionX = Mathf.Lerp(-handleAreaHalfWidth, handleAreaHalfWidth, lerpedPositionX);
-
-                _handleTargetPositionX = handlePositionX;
+                SnapToMouse();
             }
 
             HandleSpringyPosition();
@@ -70,6 +64,45 @@ namespace Springs
         {
             _isDragging = false;
             _handleTargetDeltaScale = 0f;
+
+            if (_slots > 0)
+            {
+                SnapToSlot();
+            }
+        }
+
+        private void SnapToMouse()
+        {
+            var mousePositionX = GetMousePositionXInRaycastRect();
+            var halfWidth = _backgroundRaycastRect.rect.width / 2f;
+            var lerpedPositionX = Mathf.InverseLerp(-halfWidth, halfWidth, mousePositionX);
+
+            var handleAreaHalfWidth = _handleSlideArea.rect.width / 2f;
+            var handlePositionX = Mathf.Lerp(-handleAreaHalfWidth, handleAreaHalfWidth, lerpedPositionX);
+
+            _handleTargetPositionX = handlePositionX;
+        }
+
+        private void SnapToSlot()
+        {
+            float slotPositionX;
+
+            if (_slots == 1)
+            {
+                slotPositionX = 0f;
+            }
+            else
+            {
+                var mousePositionX = GetMousePositionXInRaycastRect();
+                var halfWidth = _handleSlideArea.rect.width / 2f;
+                var currentPos = Mathf.InverseLerp(-halfWidth, halfWidth, mousePositionX);
+
+                var slotWidth = 1f / (_slots - 1);
+                var slotRounded = (float)Math.Round(currentPos / slotWidth);
+                slotPositionX = Mathf.Lerp(-halfWidth, halfWidth, slotRounded * slotWidth);
+            }
+
+            _handleTargetPositionX = slotPositionX;
         }
 
         private void HandleSpringyPosition()
@@ -86,6 +119,12 @@ namespace Springs
             SpringyUtils.UpdateDampedSpringMotion(ref _handleDeltaScale, ref _handleScaleCurrentVelocity, _handleTargetDeltaScale, _handleScaleSpringyMotionParams);
 
             _handle.localScale = new Vector3(_handleInitialScaleX + _handleDeltaScale, _handleInitialScaleY + _handleDeltaScale, 1f);
+        }
+
+        private float GetMousePositionXInRaycastRect()
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_backgroundRaycastRect, Input.mousePosition, null, out var localPoint);
+            return localPoint.x;
         }
     }
 }
