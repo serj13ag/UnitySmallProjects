@@ -48,6 +48,11 @@ namespace Springs
             _handleInitialColor = _handleImage.color;
 
             _handleTargetPositionX = _handle.localPosition.x;
+
+            if (_slots > 0)
+            {
+                SnapToSlot();
+            }
         }
 
         private void Update()
