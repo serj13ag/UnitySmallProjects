@@ -164,9 +164,11 @@ MonoBehaviour:
   _backgroundRaycastRect: {fileID: 1283868866760971102}
   _handleSlideArea: {fileID: 3631319532230882444}
   _handle: {fileID: 4205582531557282708}
+  _handleImage: {fileID: 4328620366306487983}
   _handleScaleDelta: -0.4
   _handleSpringFrequency: 20
   _handleSpringDamping: 0.5
+  _handleDraggingColor: {r: 0, g: 0.49382147, b: 0.6698113, a: 1}
   _slots: 2
 --- !u!1 &8355300255704035709
 GameObject:

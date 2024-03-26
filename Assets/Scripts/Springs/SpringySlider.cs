@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Springs
 {
@@ -10,10 +11,12 @@ namespace Springs
 
         [SerializeField] private RectTransform _handleSlideArea;
         [SerializeField] private RectTransform _handle;
+        [SerializeField] private Image _handleImage;
 
         [SerializeField] private float _handleScaleDelta;
         [SerializeField] private float _handleSpringFrequency;
         [SerializeField] private float _handleSpringDamping;
+        [SerializeField] private Color _handleDraggingColor;
 
         [SerializeField] private int _slots;
 
@@ -25,6 +28,8 @@ namespace Springs
         private float _handleDeltaScale;
         private float _handleInitialScaleX;
         private float _handleInitialScaleY;
+
+        private Color _handleInitialColor;
 
         private SpringyMotionParams _handlePositionSpringyMotionParams;
         private float _handlePositionCurrentVelocity;
@@ -39,6 +44,8 @@ namespace Springs
             var handleLocalScale = _handle.localScale;
             _handleInitialScaleX = handleLocalScale.x;
             _handleInitialScaleY = handleLocalScale.y;
+
+            _handleInitialColor = _handleImage.color;
 
             _handleTargetPositionX = _handle.localPosition.x;
         }
@@ -58,12 +65,16 @@ namespace Springs
         {
             _isDragging = true;
             _handleTargetDeltaScale = _handleScaleDelta;
+
+            _handleImage.color = _handleDraggingColor;
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
             _isDragging = false;
             _handleTargetDeltaScale = 0f;
+
+            _handleImage.color = _handleInitialColor;
 
             if (_slots > 0)
             {
