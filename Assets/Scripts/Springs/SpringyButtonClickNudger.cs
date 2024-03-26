@@ -1,16 +1,13 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Springs
 {
-    public class SpringyButtonScaler : MonoBehaviour
+    public class SpringyButtonClickNudger : MonoBehaviour
     {
-        private const float Epsilon = 0.01f;
-
         [SerializeField] private Button _button;
 
-        [SerializeField] private float _scaleDeltaOnClick;
+        [SerializeField] private float _nudgeStrength;
         [SerializeField] private float _frequency;
         [SerializeField] private float _damping;
 
@@ -46,17 +43,12 @@ namespace Springs
             SpringyUtils.CalcDampedSpringMotionParams(ref _springyMotionParams, Time.deltaTime, _frequency, _damping);
             SpringyUtils.UpdateDampedSpringMotion(ref _deltaScale, ref _currentVelocity, _targetDeltaScale, _springyMotionParams);
 
-            if (Math.Abs(_deltaScale - _targetDeltaScale) < Epsilon)
-            {
-                _targetDeltaScale = 0f;
-            }
-
             transform.localScale = new Vector3(_initialScaleX + _deltaScale, _initialScaleY + _deltaScale, 1f);
         }
 
         private void OnButtonClick()
         {
-            _targetDeltaScale = _scaleDeltaOnClick;
+            _currentVelocity += _nudgeStrength;
         }
     }
 }

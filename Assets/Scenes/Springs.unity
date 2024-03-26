@@ -291,7 +291,7 @@ MonoBehaviour:
   _damping: 0.5
   _nudgeStrength: 10
   _nudgeOnPointerEnter: 1
-  _nudgeOnPointerExit: 1
+  _nudgeOnPointerExit: 0
 --- !u!1 &463165017
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,7 +682,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Scalable Button
+  m_text: Nudge Button
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -709,8 +709,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1114,7 +1114,7 @@ GameObject:
   - component: {fileID: 2053392999}
   - component: {fileID: 2053393002}
   m_Layer: 5
-  m_Name: ScalableButton
+  m_Name: NudgeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1235,7 +1235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 2053392999}
-  _scaleDeltaOnClick: 0.1
+  _nudgeStrength: 10
   _frequency: 20
   _damping: 0.3
 --- !u!1 &2095589178
