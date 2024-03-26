@@ -20,7 +20,7 @@ namespace Springs
         [SerializeField] private float _handleSpringDamping;
         [SerializeField] private Color _handleDraggingColor;
 
-        [SerializeField] private int _slots;
+        [Min(0)][SerializeField] private int _slots;
 
         private bool _isDragging;
 
@@ -93,27 +93,35 @@ namespace Springs
 
         private void DrawSlots()
         {
-            if (_slots == 0)
+            switch (_slots)
             {
-                _slotImage.gameObject.SetActive(false);
-            }
-            else
-            {
-                var halfWidth = _handleSlideArea.rect.width / 2f;
-                var slotWidth = 1f / (_slots - 1);
-
-                for (var i = 0; i < _slots; i++)
+                case 0:
+                    _slotImage.gameObject.SetActive(false);
+                    break;
+                case 1:
+                    _slotImage.transform.localPosition = Vector3.zero;
+                    _slotImage.gameObject.SetActive(true);
+                    break;
+                default:
                 {
-                    var slot = i == 0
-                        ? _slotImage.gameObject
-                        : Instantiate(_slotImage.gameObject, _handleSlideArea);
+                    var halfWidth = _handleSlideArea.rect.width / 2f;
+                    var slotWidth = 1f / (_slots - 1);
 
-                    var slotLerpedPosition = i * slotWidth;
-                    var slotPositionX = Mathf.Lerp(-halfWidth, halfWidth, slotLerpedPosition);
+                    for (var i = 0; i < _slots; i++)
+                    {
+                        var slot = i == 0
+                            ? _slotImage.gameObject
+                            : Instantiate(_slotImage.gameObject, _handleSlideArea);
 
-                    slot.transform.localPosition = new Vector3(slotPositionX, 0f, 0f);
-                    slot.transform.SetAsFirstSibling();
-                    slot.gameObject.SetActive(true);
+                        var slotLerpedPosition = i * slotWidth;
+                        var slotPositionX = Mathf.Lerp(-halfWidth, halfWidth, slotLerpedPosition);
+
+                        slot.transform.localPosition = new Vector3(slotPositionX, 0f, 0f);
+                        slot.transform.SetAsFirstSibling();
+                        slot.gameObject.SetActive(true);
+                    }
+
+                    break;
                 }
             }
         }
