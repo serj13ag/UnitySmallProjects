@@ -13,6 +13,8 @@ namespace Springs
         [SerializeField] private RectTransform _handle;
         [SerializeField] private Image _handleImage;
 
+        [SerializeField] private Image _slotImage;
+
         [SerializeField] private float _handleScaleDelta;
         [SerializeField] private float _handleSpringFrequency;
         [SerializeField] private float _handleSpringDamping;
@@ -49,6 +51,8 @@ namespace Springs
 
             _handleTargetPositionX = _handle.localPosition.x;
 
+            DrawSlots();
+
             if (_slots > 0)
             {
                 SnapToSlot();
@@ -84,6 +88,33 @@ namespace Springs
             if (_slots > 0)
             {
                 SnapToSlot();
+            }
+        }
+
+        private void DrawSlots()
+        {
+            if (_slots == 0)
+            {
+                _slotImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                var halfWidth = _handleSlideArea.rect.width / 2f;
+                var slotWidth = 1f / (_slots - 1);
+
+                for (var i = 0; i < _slots; i++)
+                {
+                    var slot = i == 0
+                        ? _slotImage.gameObject
+                        : Instantiate(_slotImage.gameObject, _handleSlideArea);
+
+                    var slotLerpedPosition = i * slotWidth;
+                    var slotPositionX = Mathf.Lerp(-halfWidth, halfWidth, slotLerpedPosition);
+
+                    slot.transform.localPosition = new Vector3(slotPositionX, 0f, 0f);
+                    slot.transform.SetAsFirstSibling();
+                    slot.gameObject.SetActive(true);
+                }
             }
         }
 
