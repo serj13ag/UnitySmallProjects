@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 4504548471730797316}
   - component: {fileID: 2017964011936892158}
   - component: {fileID: 7013712349519127501}
+  - component: {fileID: 6238171364427554004}
   m_Layer: 5
   m_Name: SpringyCombineExample
   m_TagString: Untagged
@@ -144,3 +145,19 @@ MonoBehaviour:
   _minPosition: {x: -100, y: 0, z: 0}
   _maxPosition: {x: 100, y: 0, z: 0}
   _changeLocalPosition: 1
+--- !u!114 &6238171364427554004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4185428653673801032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29bba5661fae4b8ba367e60ff0e94dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 817112783936288979}
+  _minRotation: {x: 0, y: 0, z: 30}
+  _maxRotation: {x: 0, y: 0, z: -30}
+  _changeLocalRotation: 1
