@@ -17,6 +17,8 @@ namespace Springs.Constructor
         private void Awake()
         {
             _springyMotionParams = new SpringyMotionParams();
+
+            _currentSpringValue = _targetSpringValue;
         }
 
         private void Update()
