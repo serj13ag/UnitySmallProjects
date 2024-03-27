@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -119.27, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6666816264170097298
@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 2017964011936892158}
   - component: {fileID: 7013712349519127501}
   - component: {fileID: 6238171364427554004}
+  - component: {fileID: 6128051606965569913}
   m_Layer: 5
   m_Name: SpringyCombineExample
   m_TagString: Untagged
@@ -161,3 +162,18 @@ MonoBehaviour:
   _minRotation: {x: 0, y: 0, z: 30}
   _maxRotation: {x: 0, y: 0, z: -30}
   _changeLocalRotation: 1
+--- !u!114 &6128051606965569913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4185428653673801032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f737a0ca47490c8a03443ffa4feb8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 817112783936288979}
+  _minScale: {x: 0.3, y: 0.3, z: 0}
+  _maxScale: {x: 1, y: 1, z: 0}

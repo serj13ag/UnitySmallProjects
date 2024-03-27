@@ -713,10 +713,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1583275010}
     m_Modifications:
-    - target: {fileID: 817112783936288979, guid: f7976b505d235e345b5e14d066b6a8fc, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4185428653673801032, guid: f7976b505d235e345b5e14d066b6a8fc, type: 3}
       propertyPath: m_Name
       value: SpringyCombineExample
