@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1382e550792846e09fee500fa4dce4e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorFromCenter: 0
   _transform: {fileID: 817112783936288979}
   _minPosition: {x: -100, y: 0, z: 0}
   _maxPosition: {x: 100, y: 0, z: 0}
@@ -159,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29bba5661fae4b8ba367e60ff0e94dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorFromCenter: 0
   _transform: {fileID: 817112783936288979}
   _minRotation: {x: 0, y: 0, z: 30}
   _maxRotation: {x: 0, y: 0, z: -30}
@@ -175,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f737a0ca47490c8a03443ffa4feb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorFromCenter: 0
   _transform: {fileID: 817112783936288979}
   _minScale: {x: 0.3, y: 0.3, z: 0}
   _maxScale: {x: 1, y: 1, z: 0}
@@ -190,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1b94c9dc654937b923c7a57c68a6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorFromCenter: 1
   _image: {fileID: 6120448203305348123}
   _minAlpha: 0
   _maxAlpha: 1
